@@ -1,11 +1,9 @@
-import UserSchema from '../../models/Users/UserSchema';
-import utils from '../../../utils/index';
-import GroupsSchema from '../../models/Events/GroupsSchema';
-
+import IUsers from '../../models/Users/IUsers';
+import IGroups from '../../models/Events/IGroups';
 
 export default class UsersFactory {
 
-    create(eventId: string, groups: GroupsSchema[]) : UserSchema[] {
+    create(eventId: string, groups: IGroups[]) : IUsers[] {
 
         return groups.map( (groupSchema, i) => 
         {
@@ -15,7 +13,7 @@ export default class UsersFactory {
             const name = "Jan"
             const image = "img_1"
         
-            let userSchema : UserSchema = {
+            let IUsers : IUsers = {
                 name,
                 image,
                 created,
@@ -23,7 +21,7 @@ export default class UsersFactory {
                 groupId,
                 eventId   
             };
-            return userSchema;
+            return IUsers;
         });
     };
 };

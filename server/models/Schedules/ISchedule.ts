@@ -1,7 +1,7 @@
 import ScheduleStates from '../../../utils/ScheduleStates';
-import ScheduleTypes from './../../../utils/ScheduleTypes';
+import ScheduleTypes from '../../../utils/ScheduleTypes';
 
-export default interface SchedulesSchema 
+export default interface ISchedule 
 {
     _id: string,
     end: number,

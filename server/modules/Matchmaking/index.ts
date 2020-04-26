@@ -1,16 +1,16 @@
 const { Raster } =  require('./Components/Raster');
 const  Indexor  = require('./Components/Indexor');
 const GroupFirst = require('./Algorithms/GroupFirst');
-import ResultsSchema from './../../models/Results/ResultsSchema';
+import IResults from './../../models/Results/IResults';
 
 class MatchMakingModel
 {
-    private results : ResultsSchema[] = [];
+    private results : IResults[] = [];
     private raster = null;
     private groupFirst = new GroupFirst();
 
 
-    public match(results: ResultsSchema[], lastRounds: string[]) 
+    public match(results: IResults[], lastRounds: string[]) 
     {
         this.results = results;
         this._createRaster();   
@@ -36,7 +36,7 @@ class MatchMakingModel
         return best;
     };
 
-    private _getMatchMap(matchesArray: ResultsSchema[][]) : Map<string, string> {
+    private _getMatchMap(matchesArray: IResults[][]) : Map<string, string> {
         var map : Map<string, string> = new Map();
         for (const match of matchesArray) {
             const first = match[0].userId;

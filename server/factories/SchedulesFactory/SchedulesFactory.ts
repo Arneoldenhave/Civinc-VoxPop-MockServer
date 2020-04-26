@@ -1,18 +1,14 @@
 import ScheduleTypes from '../../../utils/ScheduleTypes';
 import ScheduleStates from '../../../utils/ScheduleStates';
-import ScheduleSchema from './../../models/Schedules/SchedulesShema';
-import ScheduleEvent from './../../models/Schedules/ScheduleEvent';
-
 
 export default class SchedulesFactory {
 
-    create(eventId: string, start: number, end: number, onboardingTime: number, thesisTime: number, rounds: number) : ScheduleEvent {
-        var schedules : ScheduleSchema[] = [];
+    create(eventId: string, start: number, end: number, onboardingTime: number, thesisTime: number, rounds: number) : any {
+        var schedules : any[] = [];
         
-        let event : ScheduleSchema = {
+        let event = {
             start: start,
             end: end,
-            _id: "onboarding_0",
             eventId: eventId,
             type: ScheduleTypes.Event,
             state : ScheduleStates.Inactive,
@@ -21,10 +17,9 @@ export default class SchedulesFactory {
         schedules.push(event);
 
         const onboardingEnd = end + onboardingTime;
-        let onboarding : ScheduleSchema = {
+        let onboarding = {
             start: start,
             end: onboardingEnd,
-            _id: "onboarding_0",
             eventId: eventId,
             type: ScheduleTypes.Onboarding,
             state : ScheduleStates.Inactive,
@@ -37,10 +32,9 @@ export default class SchedulesFactory {
         const thesisStart = onboardingEnd;
         const thesisEnd = thesisStart + thesisTime;
 
-        let thesis : ScheduleSchema = {
+        let thesis = {
             start: thesisStart ,
             end: thesisEnd,
-            _id: "onboarding_0",
             eventId: eventId,
             type: ScheduleTypes.Onboarding,
             state : ScheduleStates.Inactive,
@@ -49,7 +43,6 @@ export default class SchedulesFactory {
             }
         };
         schedules.push(thesis);
-    
 
         const totalDuration = end - start;
         const timeLeft = totalDuration - thesisTime - onboardingTime;
@@ -59,10 +52,9 @@ export default class SchedulesFactory {
         
         for (var i = 0; i < rounds; i++) {
 
-            let chat : ScheduleSchema = {
+            let chat  = {
                 start: chatStart ,
                 end: chatEnd,
-                _id: "onboarding_0",
                 eventId: eventId,
                 type: ScheduleTypes.Onboarding,
                 state : ScheduleStates.Inactive,
@@ -75,14 +67,13 @@ export default class SchedulesFactory {
             chatEnd = chatStart + chatDuration;
         };
 
-        let scheduleEvent : ScheduleEvent = {
+        let IScheduleEvent = {
             eventId: eventId,
             start: start,
             status: ScheduleStates.Inactive,
             end: end,
             schedules: schedules
-        };
-        
-        return scheduleEvent;
+        }
+        return IScheduleEvent;
     };
 };

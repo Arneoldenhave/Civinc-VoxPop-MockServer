@@ -1,10 +1,10 @@
-import UserSchema from "../../models/Users/UserSchema";
+import IUsers from "../../models/Users/IUsers";
 
 export default interface ResultsSetup 
 {
     thesisIds: string[],
     eventId: string,
-    users: UserSchema[],
+    users: IUsers[],
 }
 
 interface groupSetup 

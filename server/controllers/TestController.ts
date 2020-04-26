@@ -10,12 +10,17 @@ import GroupsFactory from './../factories/GroupsFactory/GroupsFactory';
 import SchedulesFactory from './../factories/SchedulesFactory/SchedulesFactory';
 
 import Group from '../factories/GroupsFactory/GroupSetup';
-import GroupsSchema from '../models/Events/GroupsSchema';
-import ThesesSchema from '../models/Theses/ThesesSchema';
-import UserSchema from '../models/Users/UserSchema';
-import ResultsSchema from '../models/Results/ResultsSchema';
+import IGroups from '../models/Events/IGroups';
+import ITheses from '../models/Theses/ITheses';
+import IUsers from '../models/Users/IUsers';
+import IResults from '../models/Results/IResults';
 import EventFactorySetup from '../factories/EventsFactory/EventFactorySetup';
-import EventsSchema from '../models/Events/EventsSchema';
+import IEvents from '../models/Events/IEvents';
+
+
+import SchedulesEvent from './../models/Schedules/SchedulesModel';
+
+import Event from './../models/Events/EventsModel';
 
 
 import MatchMakingAlgorith from './../modules/Matchmaking/index';
@@ -55,18 +60,18 @@ export default class TestController {
 
         // groups
         const groupSetup : Group[] = testSetup.groups;
-        const groups : GroupsSchema[] = this.groupsFactory.create(groupSetup);
+        const groups : IGroups[] = this.groupsFactory.create(groupSetup);
 
         // theses 
         const thesesSetup : number = testSetup.theses.length - 1;
-        const theses : ThesesSchema[] = this.thesesFavtory.create(thesesSetup);
+        const theses : ITheses[] = this.thesesFavtory.create(thesesSetup);
         const thesisIds : string[] = theses.map(t => t._id);
 
         // users
-        const users : UserSchema[] = this.userFacotory.create(eventId, groups)
+        const users : IUsers[] = this.userFacotory.create(eventId, groups)
 
         // results
-        const results : ResultsSchema[] = this.resultsFactory.create(users, thesisIds);
+        const results : IResults[] = this.resultsFactory.create(users, thesisIds);
 
         // event 
         const eventSetup : EventFactorySetup = {
@@ -82,16 +87,19 @@ export default class TestController {
             realUsers: testSetup.realUsers
         };
 
-        const event : EventsSchema = this.eventFactory.create(eventSetup);
+        const event :IEvents = this.eventFactory.create(eventSetup);
 
         // schedule
         const onboardingTime : number =  eventSetup.onboardingTime;
         const thesesTime : number = eventSetup.thesesTime;
-        const schedules = this.schedulesFactory.create(event._id, event.start, event.end, onboardingTime, thesesTime, event.rounds)
+        const schedulesEventSetup = this.schedulesFactory.create(event._id, event.start, event.end, onboardingTime, thesesTime, event.rounds)
+        const schedulesEvent = new SchedulesEvent(schedulesEventSetup)
 
         const algorithm = new MatchMakingAlgorith();
-        const matches = algorithm.match(results, [])
-        this.reponseHandler.ok(res, matches);
+        const matches = algorithm.match(results, []);
+        const e = new Event(testSetup);
+        const saved = await schedulesEvent.save();
+        this.reponseHandler.ok(res, saved);
     };
 
 };

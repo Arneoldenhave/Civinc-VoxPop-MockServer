@@ -1,18 +1,9 @@
+import mongoose from 'mongoose';
 import ThesesSchema from './ThesesSchema';
 
-export default class ThesesModel {
 
+ThesesSchema.statics.addAnswers = async function(id: string, answers: [number]) {
+    const thesis = await mongoose.model('Theses', ThesesSchema).findById(id);
+}
 
-    async findBy(id: string) {
-
-    }
-
-    async create(thesis: ThesesSchema) {
-
-    }
- 
-    async updateBy(id: string, totalAnswers: [number]) {
-
-    }
-    
-};
+export default mongoose.model('Theses', ThesesSchema);

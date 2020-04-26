@@ -1,4 +1,4 @@
-import GroupsSchema from "../../models/Events/GroupsSchema";
+import IGroups from "../../models/Events/IGroups";
 
 export default interface EventFactorySetup  
 { 
@@ -10,6 +10,6 @@ export default interface EventFactorySetup
 	thesesTime: number, 
 	theses: string[], 
 	rounds: number, 
-	groups: GroupsSchema[], 
+	groups: IGroups[], 
 	realUsers: number
 };

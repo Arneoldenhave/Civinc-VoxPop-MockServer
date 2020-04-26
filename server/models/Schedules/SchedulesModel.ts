@@ -1,39 +1,49 @@
-import SchedulesSchema from './SchedulesShema';
+import ISchedule from './ISchedule';
 import ResultType from './../../../utils/ResultType';
-import ScheduleEvent from './ScheduleEvent';
+import mongoose from 'mongoose';
+
+import IScheduleEvent from './IScheduleEvent';
 import ScheduleStates from '../../../utils/ScheduleStates';
 
-export default class ScheduleModel {
+import ScheduleTypes from '../../../utils/ScheduleTypes';
+import ScheduleSchema from './ScheduleSchema';
 
-    private scheduleEvents : ScheduleEvent[] = [];
+const Schema = mongoose.Schema;
 
-    timeout(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
+const ScheduleEventSchema = new Schema<IScheduleEvent>({
 
-    async save(ScheduleEvent: ScheduleEvent[], time: number) : Promise<ResultType<Error,ScheduleEvent[]>> {
-        await this.timeout(time);
-        this.scheduleEvents.concat(this.scheduleEvents, ScheduleEvent);
+    start: {
+        type: Number,
+        required: true
+    },
+    end: {
+        type: Number,
+        required: true
+    },
+    eventId: {
+        type: String,
+        required: true,
+    },
+    meta: {
+        type: Object,
+        default: null
+    },
+    type: {
+        type: ScheduleTypes,
+        default: ScheduleTypes.Event
+    },
+    state : {
+        type: ScheduleStates,
+        default: ScheduleStates.Inactive,
+    },
+    schedules: {
+        type: [ScheduleSchema],
+        required: [],
+    }
+});
 
-        const res : ResultType<Error, ScheduleEvent[]> = 
-        {
-            result : []
-        };
-        return res;
-    };
-
-    async findAboutToStart(time: number) {
-        await this.timeout(1)
-        const aboutToStart = this.scheduleEvents.filter(se => se.start > time && se.status === ScheduleStates.Inactive)
-        return aboutToStart;
-    };
-
-    async findBy(eventId: string, time: number) : Promise<ResultType<Error, ScheduleEvent[]>> {
-        await this.timeout(time);   
-        const res : ResultType<Error, ScheduleEvent[]> = 
-        {
-            result : this.scheduleEvents.filter(s => s.eventId === eventId)
-        };
-        return res;
-    };
+ScheduleEventSchema.statics.findAboutToStart = async function (time: number) {
+    return mongoose.model('ScheduleEvent').find({start: { $lt: time }, status : "INACTIVE" });
 };
+
+export default mongoose.model('ScheduleEvent', ScheduleEventSchema);

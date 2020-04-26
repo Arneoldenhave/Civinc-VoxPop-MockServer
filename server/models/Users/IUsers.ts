@@ -1,4 +1,4 @@
-export default interface UserSchema 
+export default interface IUsers 
 {
     _id: string;
     name: string;

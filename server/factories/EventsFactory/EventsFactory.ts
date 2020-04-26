@@ -1,5 +1,5 @@
 import EventFactorySetup from './EventFactorySetup'
-import EventSchema from './../../models/Events/EventsSchema';
+import EventSchema from './../../models/Events/IEvents';
 
 export default class EventFactory {
 

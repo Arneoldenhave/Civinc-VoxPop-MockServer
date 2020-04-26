@@ -1,24 +1,13 @@
+import mongoose, { model } from 'mongoose';
+import IResults from './IResults';
 import ResultsSchema from './ResultsSchema';
-import { rejects } from 'assert';
 
-export default class ResultsModel {
-    
-    results : ResultsSchema[] = [];
+ResultsSchema.statics.findByEventId = async function(id: string) {
+    return mongoose.model('Results').find({eventId: id});
+};
 
-    timeout(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+ResultsSchema.statics.find = async function(groupId: string, thesisId: string) {
+    return mongoose.model('Results').find({eventId: groupId, thesisId: thesisId } );
+};
 
-    async findByEvent(id: string):  Promise<ResultsSchema[]> {
-        await this.timeout(10);
-        const found = this.results.filter(r => r._id === id);
-        return found;
-    }
-
-
-    async save(results: ResultsSchema[]) : Promise<ResultsSchema[]> {
-        await this.timeout(10);
-        return this.results.concat(this.results, results)
-    }
-
-}
+export default mongoose.model('Results', ResultsSchema);

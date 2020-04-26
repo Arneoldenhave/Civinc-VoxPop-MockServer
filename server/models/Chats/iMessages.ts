@@ -1,4 +1,4 @@
-export default interface MessageSchema 
+export default interface iMessages 
 {
     _id: string,
     text: string,

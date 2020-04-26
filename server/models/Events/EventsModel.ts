@@ -1,25 +1,50 @@
-import GroupSchema from './GroupsSchema';
-import EventsSchema from './EventsSchema';
-import { rejects } from 'assert';
+import IGroups from "./IGroups";
+import IEvents from './IEvents';
+import mongoose from 'mongoose';
 
-export default class EventsModel {
+const Schema = mongoose.Schema;
 
-    events: EventsSchema[] = [];
+const GroupsSchema = new Schema<IGroups>({
+    name: {
+        type: String,
+        required: true
+    },
+    amount: {
+        type: Number,
+        default: 0,
+    }
+});
 
-    timeout(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
+const EventsSchema = new Schema({
+    start: {
+        type: Number,
+        required: true,
+    },
 
-    async findBy(id: string) : Promise<EventsSchema> {
-        await this.timeout(10);
-        let found = this.events.filter(e => e._id === id )[0];
-        return found;
-    };
+    end: {
+        type: Number,
+        required : true,
+    },
 
-    async create(event: EventsSchema) : Promise<EventsSchema> {
-        await this.timeout(10) 
-        this.events.push(event)
-        return event;
-    };
+    name: {
+        type: String,
+        required: true
+    },
 
-};
+    groups: {
+        type : [GroupsSchema],
+        default: [],
+    },
+
+    lastRounds: {
+        type : [String],
+        default: [],
+    },
+
+    rounds: {
+        type: Number,
+        required: 0,
+    }
+});
+
+export default mongoose.model('Events', EventsSchema);

@@ -1,8 +1,17 @@
 import mongoose from 'mongoose';
 
-const ResultsSchema = new Schema({
+const Schema = mongoose.Schema;
 
-    userId: {
+const UsersSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    created: {
+        type: Number,
+        default: Date.now()
+    },
+    groupId: {
         type: String,
         required: true,
     },
@@ -10,22 +19,14 @@ const ResultsSchema = new Schema({
         type: String,
         required: true,
     },
-    groupId: {
+    image:  {
         type: String,
         required: true,
     },
-    thesisId: {
-        type: String,
-        required: true,
+    feedBack : {
+        type: [String],
+        default: []
     },
-    answer: {
-        type: String,
-        required: true,
-    },
-    result: {
-        type: Number,
-        required: true,
-    },
-});
+})
 
-export default ResultsSchema;
+export default UsersSchema;

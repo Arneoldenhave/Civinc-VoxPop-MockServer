@@ -1,6 +1,6 @@
 import ResultsFactoryData from './ResultsFactoryData';
-import ResultsSchema from '../../models/Results/ResultsSchema';
-import UserSchema from '../../models/Users/UserSchema';
+import IResults from '../../models/Results/IResults';
+import IUsers from '../../models/Users/IUsers';
 
 
 export default class ResultsFactory {
@@ -11,8 +11,8 @@ export default class ResultsFactory {
         this.answers = answers;
     };
 
-    create(users: UserSchema[], thesisIds: string[]) {
-        let results : ResultsSchema[] = [];
+    create(users: IUsers[], thesisIds: string[]) {
+        let results : IResults[] = [];
         var i = 0;
         for (const thesisId of thesisIds) 
         {    
@@ -22,7 +22,7 @@ export default class ResultsFactory {
                 const anwser = this.answers[resultIndex];
                 const _id = `result_${i}`;
 
-                let result : ResultsSchema = 
+                let result : IResults = 
                 {
                     _id: _id,
                     userId: user._id,

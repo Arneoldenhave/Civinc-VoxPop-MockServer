@@ -1,5 +1,5 @@
 import SchdulesModel from './../models/Schedules/SchedulesModel';
-import ScheduleEvent from '../models/Schedules/ScheduleEvent';
+import IScheduleEvent from '../models/Schedules/IScheduleEvent';
 import ScheduleStates from '../../utils/ScheduleStates';
 import { EventEmitter } from 'events';
 import ScheduleEmitter from './ScheduleEmitter';
@@ -8,13 +8,13 @@ import ScheduleEmitter from './ScheduleEmitter';
 class ScheduleService {
 
     schedulesModel : SchdulesModel
-    // eventId: ScheduleEvent 
-    activeEvents : Map<string, ScheduleEvent> = new Map();
+    // eventId: IScheduleEvent 
+    activeEvents : Map<string, IScheduleEvent> = new Map();
     emitter : EventEmitter;
  
     private async poller() {
 
-       let aboutToStart : ScheduleEvent[] = await this.schedulesModel.findAboutToStart(3)
+       let aboutToStart : IScheduleEvent[] = await this.schedulesModel.findAboutToStart(3)
         aboutToStart.forEach(se => {
             this.activeEvents.set(se.eventId, se);
         });

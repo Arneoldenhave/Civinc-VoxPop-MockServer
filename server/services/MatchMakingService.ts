@@ -1,8 +1,8 @@
 import ResultsModel from '../models/Results/ResultsModel';
-import ResultsSchema from './../models/Results/ResultsSchema';
+import IResults from './../models/Results/IResults';
 import MatchingAlgorithm from '../modules/Matchmaking/index';
 import EventsModel from './../models/Events/EventsModel';
-import EventSchema from './../models/Events/EventsSchema';
+import EventSchema from './../models/Events/IEvents';
 import SocketService from './SocketService';
 import SchedulesEmitter from './ScheduleEmitter';
 import { EventEmitter } from 'events';
@@ -29,7 +29,7 @@ class MatchMakingService {
         }
 
         const lastRounds = event.lastRounds;
-        const results : ResultsSchema[] = await this.resultsModel.findByEvent(id);        
+        const results : IResults[] = await this.resultsModel.findByEvent(id);        
         const inactiveUsers : string[] = SocketService.getDisconnected(event._id);
         const active = results.filter(result => !inactiveUsers.includes(result._id));
         const matches = this.matchMaking.match(active, lastRounds);

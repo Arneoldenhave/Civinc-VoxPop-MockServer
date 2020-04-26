@@ -1,11 +1,12 @@
-import SchedulesSchema from "./SchedulesShema";
+import ISchedule from "./ISchedule";
 import ScheduleStates from "../../../utils/ScheduleStates";
 
-export default interface ScheduleEvent 
+export default interface IScheduleEvent 
 {
     start: number,
     end: number,
     eventId: string,
     status: ScheduleStates,
-    schedules: SchedulesSchema[]
+    schedules: ISchedule[]
+    _id: string,
 }

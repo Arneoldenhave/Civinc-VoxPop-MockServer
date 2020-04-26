@@ -1,11 +1,11 @@
-import GroupsSchema from './GroupsSchema';
+import IGroups from './IGroups';
 
-export default interface EventsSchema {
+export default interface IEvents {
     _id : string,
     start: number,
     end: number,
     name: string,
-    groups: GroupsSchema[],
+    groups: IGroups[],
     lastRounds : string[],
     rounds: number
 };

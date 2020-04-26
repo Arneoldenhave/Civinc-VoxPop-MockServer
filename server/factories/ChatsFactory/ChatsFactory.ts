@@ -1,15 +1,15 @@
 import ChatsFactoryData from './ChatsFactoryData';
-import ChatsSchema from './../../models/Chat/ChatsSchema';
+import iChats from '../../models/Chats/iChats';
 
 export default class ChatsFactory {
 
     cretate(data: ChatsFactoryData) {
-        var chats : ChatsSchema[ ]= []; 
+        var chats : any [ ]= []; 
         
         data.matches.forEach(( results, i) => {
             const userIds = results.map(r => r._id)
         
-            var chat : ChatsSchema = 
+            var chat  = 
             {
                 _id : `chat_${i}`,
                 start : data.start,

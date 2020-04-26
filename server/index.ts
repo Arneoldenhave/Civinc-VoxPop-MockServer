@@ -1,14 +1,19 @@
 import express from "express";
-
 import bodyParser from "body-parser";
 import routes from './routes/index';
-const app = express();
-
+import Mongoose from './db/Mongoose';
 import socketService from './services/SocketService';
 
 
+const app = express();
+const database = new Mongoose();
+
+// Connect to DB;
+database.connectBD(5);
+
 // BODY PARSER
 app.use(bodyParser.json());
+
 
 app.use(routes);
 

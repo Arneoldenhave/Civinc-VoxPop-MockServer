@@ -1,5 +1,4 @@
-import ResultsScema from './../../models/Results/ResultsSchema';
-
+import ResultsScema from './../../models/Results/IResults';
 export default interface ChatsFactoryData 
 {
     eventId: string,

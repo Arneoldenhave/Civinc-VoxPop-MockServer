@@ -1,28 +1,24 @@
-export default class ThesesSchema 
-{
-    _id: string;
-    created: number;
-    text: string;
-    answerOptions: string[];
-    totalAnswers : number[];
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-    constructor
-    (  
-        _id: string,
-        text: string,
-        answerOptions: string[]
-    )
-    {
-        this._id = _id;
-        this.text = text;
-        this.answerOptions = answerOptions;
-        this.created = Date.now();
-        this.totalAnswers = [];
-    }
+const ThesesSchema = new Schema({
 
-    timesUsed = () => {
-        const add = (total: number, num: number) => total + num 
-        return this.totalAnswers.reduce(add)
-    }
-}
+    text: {
+        type: [String],
+        required: true,
+    },
+    answerOptions: {
+        type: [String],
+        required: true,
+    },
+    totalAnswers: {
+        type: [Number],
+        default: 0,
+    },
+    created: {
+        type: Number,
+        default: Date.now(),
+    },
+});
 
+export default ThesesSchema;
