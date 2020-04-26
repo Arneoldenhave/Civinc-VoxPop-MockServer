@@ -1,10 +1,11 @@
-import GroupsSchema from './GroupSchema';
+import GroupsSchema from './GroupsSchema';
 
 export default interface EventsSchema {
     _id : string,
-    start: Date,
-    end: Date,
+    start: number,
+    end: number,
     name: string,
-    groups: [GroupsSchema],
-    lastRounds : [number]
-}
+    groups: GroupsSchema[],
+    lastRounds : string[],
+    rounds: number
+};

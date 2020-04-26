@@ -1,5 +1,7 @@
-export default interface TestSetupFactoryData {
+import Group from '../GroupsFactory/GroupSetup'
 
+export default interface TestSetupFactoryData 
+{
     "name": string,
     "start": number,
     "end": number,
@@ -8,6 +10,6 @@ export default interface TestSetupFactoryData {
     "thesesTime": number,
     "theses" : string[],
     "rounds": number,
-    "groups": number[]
+    "groups": Group[]
     "realUsers": number,
-}
+};

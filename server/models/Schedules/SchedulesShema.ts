@@ -1,13 +1,13 @@
+import { ScheduleTypes, ScheduleStates } from '../../../utils/ScheduleStates';
 
-interface ScheduleSchema 
+export default interface SchedulesSchema 
 {
     _id: string,
-    type: string,
-    start: Date, 
-    end: Date,
+    end: number,
+    start: number, 
+    eventId: string,
+    type: ScheduleTypes,
+    state: ScheduleStates,
     redirect?: object,
     meta?: object,
-}
-
-export default ScheduleSchema
-
+};

@@ -1,4 +1,4 @@
-import GroupSchema from './GroupSchema';
+import GroupSchema from './GroupsSchema';
 import EventsSchema from './EventsSchema';
 import { rejects } from 'assert';
 

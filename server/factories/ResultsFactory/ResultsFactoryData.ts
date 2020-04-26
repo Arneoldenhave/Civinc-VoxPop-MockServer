@@ -1,8 +1,10 @@
+import UserSchema from "../../models/Users/UserSchema";
+
 export default interface ResultsSetup 
 {
-    thesisIds: [string],
+    thesisIds: string[],
     eventId: string,
-    groups: [groupSetup],
+    users: UserSchema[],
 }
 
 interface groupSetup 

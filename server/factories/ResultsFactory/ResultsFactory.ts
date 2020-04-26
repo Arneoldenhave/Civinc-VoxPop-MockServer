@@ -1,5 +1,6 @@
 import ResultsFactoryData from './ResultsFactoryData';
 import ResultsSchema from '../../models/Results/ResultsSchema';
+import UserSchema from '../../models/Users/UserSchema';
 
 
 export default class ResultsFactory {
@@ -10,35 +11,33 @@ export default class ResultsFactory {
         this.answers = answers;
     };
 
-    create(data: ResultsFactoryData) : ResultsSchema[] {
-
-        let results = [];
-        for (const thesisId of data.thesisIds) 
+    create(users: UserSchema[], thesisIds: string[]) {
+        let results : ResultsSchema[] = [];
+        var i = 0;
+        for (const thesisId of thesisIds) 
         {    
-            for (const group of data.groups) 
+            for (const user of users) 
             {
-                for (var i = 0; i < group.number; i++) 
-                {
-                    const result = this._randomIndex();
-                    const answer = this.answers[result];
-                    var userId = '';
+                const resultIndex = this._randomIndex();
+                const anwser = this.answers[resultIndex];
+                const _id = `result_${i}`;
 
-                    if (group.realUsers[i]) 
-                    {
-                        userId = group.realUsers[i];
-                    } else 
-                    {
-                        userId = `user_${i}`; 
-                    }
-                    results.push
-                    (
-                        new ResultsSchema(`result_${i}`, userId, data.eventId, group.groupId, thesisId, answer, result)
-                    );
+                let result : ResultsSchema = 
+                {
+                    _id: _id,
+                    userId: user._id,
+                    groupId: user.groupId,
+                    eventId: user.eventId,
+                    thesisId: thesisId,
+                    result: resultIndex,
+                    answer: anwser,
                 };
+                results.push(result);
+                i++
             };
         };
         return results;
-    };
+    }
 
     _randomIndex() : number {
         return Math.floor(Math.random() * 5);

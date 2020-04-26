@@ -1,14 +1,29 @@
 import UserSchema from '../../models/Users/UserSchema';
-import UserFactoryData from './UserFactoryData';
 import utils from '../../../utils/index';
+import GroupsSchema from '../../models/Events/GroupsSchema';
 
 
 export default class UsersFactory {
 
-    create(data: UserFactoryData) : UserSchema[] {
-        return Array(data.amount).map(i => {
-            let _id : string = utils.Crypto.UUID();
-            return new UserSchema(_id,  `user_${i}`, `group_${data.groupId}`, `event_${data.eventId}`, 'image_1')
+    create(eventId: string, groups: GroupsSchema[]) : UserSchema[] {
+
+        return groups.map( (groupSchema, i) => 
+        {
+            const _id     = `user_${i}_${groupSchema._id}`;
+            const groupId = `group_${groupSchema._id}`;
+            const created = Date.now();
+            const name = "Jan"
+            const image = "img_1"
+        
+            let userSchema : UserSchema = {
+                name,
+                image,
+                created,
+                _id,
+                groupId,
+                eventId   
+            };
+            return userSchema;
         });
     };
 };
