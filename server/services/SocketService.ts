@@ -1,5 +1,7 @@
-import SocketModel from './../modules/SocketModule/SocketModel';
+import SocketModel from '../modules/SocketModule/SocketModel';
 import ChatModel from './../models/Chat/Model';
+import { EventEmitter } from 'events';
+import ScheduleEmitter from './ScheduleEmitter';
 
 const MESSAGE = "message";
 
@@ -7,11 +9,20 @@ class SocketController {
 
     chatModel: ChatModel;
     socketModel: SocketModel;
+    scheduleEmitter: EventEmitter;
 
-    constructor(socketModel: SocketModel, chatModel: ChatModel) {
+
+    constructor(socketModel: SocketModel, chatModel: ChatModel, scheduleEmitter: EventEmitter) 
+    {
+        this.scheduleEmitter = scheduleEmitter;
         this.chatModel = chatModel;
         this.socketModel = socketModel;
-    }
+
+        scheduleEmitter.on("SCHEDULE", schedule => {
+
+            console.log("SCHEDULE");
+        });
+    };
 
     onConnection(socket: any) {
         this.socketModel.onConnection(socket);
@@ -53,6 +64,8 @@ class SocketController {
         const result = this.socketModel.broadcastToSpecific(eventId, [matchId], MESSAGE, message);
         return result
     };
+    
+
 
     start(io: any) {
         io.on('connection', async (socket: any) => {
@@ -70,7 +83,6 @@ class SocketController {
 
                 const { eventId, chatId, userId, matchId, message} = data;
 
-                if (!eventId, chatId, userId, matchId, message) { return }
                 this.chatModel.updateChat(chatId, message);
                 const result = this.socketModel.broadcastToSpecific(eventId, [matchId], MESSAGE, message);
             });
@@ -78,4 +90,4 @@ class SocketController {
     };
 };
 
-export default new SocketController(new SocketModel(), new ChatModel());
+export default new SocketController(new SocketModel(), new ChatModel(), ScheduleEmitter);

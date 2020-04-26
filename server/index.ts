@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import routes from './routes/index';
 const app = express();
 
+import socketService from './services/SocketService';
+
 
 // BODY PARSER
 app.use(bodyParser.json());

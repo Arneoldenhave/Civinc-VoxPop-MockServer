@@ -30,8 +30,6 @@ class MatchResult {
     };
 };
 
-
-
 /**
  * Takes raster datasource
  * Creates array of access objects per round

@@ -4,6 +4,8 @@ const router = express.Router();
 const app = express();
 const server = require('http').createServer(app);
 
+import ScheduleService from "./server/services/ScheduleService";
+
 
 // BODY PARSER
 app.use(bodyParser.json());

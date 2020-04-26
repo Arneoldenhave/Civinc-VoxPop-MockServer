@@ -1,4 +1,5 @@
-import { ScheduleTypes, ScheduleStates } from '../../../utils/ScheduleStates';
+import ScheduleStates from '../../../utils/ScheduleStates';
+import ScheduleTypes from './../../../utils/ScheduleTypes';
 
 export default interface SchedulesSchema 
 {

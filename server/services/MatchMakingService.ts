@@ -4,15 +4,16 @@ import MatchingAlgorithm from '../modules/Matchmaking/index';
 import EventsModel from './../models/Events/EventsModel';
 import EventSchema from './../models/Events/EventsSchema';
 import SocketService from './SocketService';
+import SchedulesEmitter from './ScheduleEmitter';
+import { EventEmitter } from 'events';
 
-
-export default class MatchMakingService {
+class MatchMakingService {
 
     private resultsModel : ResultsModel;
     private eventsModel : EventsModel;
     private matchMaking: MatchingAlgorithm;
 
-    constructor(model: ResultsModel, matchMaking: MatchingAlgorithm, eventsModel : EventsModel) {
+    constructor(model: ResultsModel, matchMaking: MatchingAlgorithm, eventsModel : EventsModel, schedulesEmitter: EventEmitter) {
         this.resultsModel = model;
         this.matchMaking = matchMaking;
         this.eventsModel = eventsModel;
@@ -31,7 +32,7 @@ export default class MatchMakingService {
         const results : ResultsSchema[] = await this.resultsModel.findByEvent(id);        
         const inactiveUsers : string[] = SocketService.getDisconnected(event._id);
         const active = results.filter(result => !inactiveUsers.includes(result._id));
-        const matches = this.matchMaking.match(active,lastRounds);
+        const matches = this.matchMaking.match(active, lastRounds);
 
         SocketService.connectMatches(event._id, matches);
 
@@ -43,3 +44,5 @@ export default class MatchMakingService {
         };
     };
 };
+
+export default new MatchMakingService(new ResultsModel, new MatchingAlgorithm, new EventsModel, SchedulesEmitter);

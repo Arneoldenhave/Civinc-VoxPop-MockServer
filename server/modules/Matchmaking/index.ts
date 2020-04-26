@@ -1,7 +1,6 @@
 const { Raster } =  require('./Components/Raster');
 const  Indexor  = require('./Components/Indexor');
 const GroupFirst = require('./Algorithms/GroupFirst');
-const { Logger } = require('./../../server/BaseClasses/LoggerClass/Loggers');
 import ResultsSchema from './../../models/Results/ResultsSchema';
 
 class MatchMakingModel
@@ -9,9 +8,9 @@ class MatchMakingModel
     private results : ResultsSchema[] = [];
     private raster = null;
     private groupFirst = new GroupFirst();
-    private logger = new Logger("MatchMakingModel")
 
-    public match(results: ResultsSchema[], lastRounds: [number]) 
+
+    public match(results: ResultsSchema[], lastRounds: string[]) 
     {
         this.results = results;
         this._createRaster();   
@@ -20,7 +19,7 @@ class MatchMakingModel
         return best;
     };
 
-    private _getBestRound(matchResults: any, lastRounds: [string]) 
+    private _getBestRound(matchResults: any, lastRounds: string[]) 
     {
         const notIn = (num: string, array: string[]) => {
             return array.indexOf(num) === -1;
@@ -37,12 +36,12 @@ class MatchMakingModel
         return best;
     };
 
-    private _getMatchMap(matchesArray) {
-        var map = {};
+    private _getMatchMap(matchesArray: ResultsSchema[][]) : Map<string, string> {
+        var map : Map<string, string> = new Map();
         for (const match of matchesArray) {
             const first = match[0].userId;
             const second = match[1].userId;
-            map[first] = second;
+            map.set(first, second);
         };
         return map;
     };

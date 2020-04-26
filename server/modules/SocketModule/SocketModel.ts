@@ -1,4 +1,4 @@
-const SocketEvent = require('./SocketEvent');
+import SocketEvent from './SocketEvent';
 
 /**
  * Model that manages all Socket events 
@@ -10,7 +10,7 @@ class SocketModule {
     /**
      * Key value store of SocketEvents by eventid
      */
-    events = {};
+    events : Map<string, SocketEvent> = new Map();
 
     /**
      * Set matches in event
@@ -18,7 +18,7 @@ class SocketModule {
      * @param {*} matches 
      */
     setMatches(eventId: string, matches : any[]) {
-        const event = this.events[eventId];
+        let event = this.events.get(eventId)
         if (!event) {
             return null;
         };
@@ -31,7 +31,7 @@ class SocketModule {
      * @param {*} eventId 
      */
     getConnected(eventId: string) {
-        const event = this.events[eventId];
+        const event = this.events.get(eventId)
         if (!event) {
             return null;
         };
@@ -43,7 +43,7 @@ class SocketModule {
      * @param {*} eventId 
      */
     getDisconnected(eventId: string) {
-        const event = this.events[eventId];
+        const event = this.events.get(eventId)
         if (!event) {
             return null;
         };
@@ -55,12 +55,17 @@ class SocketModule {
      * On user connected
      * @param {*} socket 
      */
-    onConnection(connection) {
+    onConnection(connection: any) {
         const { eventId, userId, socket} = connection;
-        if (!this.events[eventId])  {
-            this.events[eventId] = new SocketEvent(eventId);
+ 
+        if (!this.events.get(eventId))  {
+            this.events.set(eventId, new SocketEvent(eventId))
         };
-        this.events[eventId].addConnection(userId, socket);
+        const event = this.events.get(eventId);
+        if (event) {
+            event.addConnection(userId, socket);
+        }
+       
     };
 
     /**
@@ -72,7 +77,7 @@ class SocketModule {
      */
     broadcastToSpecific(eventId: string, ids: string[], type: string, data: any) {
        // console.log(eventId, ids, type, data);
-        const event = this.events[eventId];
+        const event = this.events.get(eventId)
         if (!event) {
             console.log(`\n broadcastToSpecific event ${eventId} not founc \n`)
             return null;
@@ -91,7 +96,7 @@ class SocketModule {
      */
     broadcastToAll(eventId: string, type: string, data: any) {
 
-        const event = this.events[eventId];
+        const event = this.events.get(eventId);
         if (!event) {
             console.log("NO EVENET          " + eventId);
              return null;
@@ -104,7 +109,7 @@ class SocketModule {
      * @param {*} eventId 
      */
     getEventById(eventId: string) {
-        return this.events[eventId];
+        return this.events.get(eventId);
     };
 
     /**

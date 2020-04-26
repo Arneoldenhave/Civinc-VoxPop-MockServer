@@ -18,6 +18,8 @@ import EventFactorySetup from '../factories/EventsFactory/EventFactorySetup';
 import EventsSchema from '../models/Events/EventsSchema';
 
 
+import MatchMakingAlgorith from './../modules/Matchmaking/index';
+
 
 export default class TestController {
 
@@ -80,16 +82,16 @@ export default class TestController {
             realUsers: testSetup.realUsers
         };
 
-        const event  : EventsSchema = this.eventFactory.create(eventSetup);
+        const event : EventsSchema = this.eventFactory.create(eventSetup);
 
         // schedule
         const onboardingTime : number =  eventSetup.onboardingTime;
         const thesesTime : number = eventSetup.thesesTime;
         const schedules = this.schedulesFactory.create(event._id, event.start, event.end, onboardingTime, thesesTime, event.rounds)
- 
-        this.reponseHandler.ok(res, schedules);
 
-
+        const algorithm = new MatchMakingAlgorith();
+        const matches = algorithm.match(results, [])
+        this.reponseHandler.ok(res, matches);
     };
 
 };

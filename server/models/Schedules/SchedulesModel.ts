@@ -1,30 +1,38 @@
 import SchedulesSchema from './SchedulesShema';
 import ResultType from './../../../utils/ResultType';
+import ScheduleEvent from './ScheduleEvent';
+import ScheduleStates from '../../../utils/ScheduleStates';
 
 export default class ScheduleModel {
 
-    private schedules : SchedulesSchema[] = [];
+    private scheduleEvents : ScheduleEvent[] = [];
 
     timeout(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
 
-    async save(schedules: SchedulesSchema[], time: number) : Promise<ResultType<Error,SchedulesSchema[]>> {
+    async save(ScheduleEvent: ScheduleEvent[], time: number) : Promise<ResultType<Error,ScheduleEvent[]>> {
         await this.timeout(time);
-        this.schedules.concat(this.schedules, schedules);
+        this.scheduleEvents.concat(this.scheduleEvents, ScheduleEvent);
 
-        const res : ResultType<Error, SchedulesSchema[]> = 
+        const res : ResultType<Error, ScheduleEvent[]> = 
         {
             result : []
         };
         return res;
     };
 
-    async findBy(eventId: string, time: number) : Promise<ResultType<Error, SchedulesSchema[]>> {
+    async findAboutToStart(time: number) {
+        await this.timeout(1)
+        const aboutToStart = this.scheduleEvents.filter(se => se.start > time && se.status === ScheduleStates.Inactive)
+        return aboutToStart;
+    };
+
+    async findBy(eventId: string, time: number) : Promise<ResultType<Error, ScheduleEvent[]>> {
         await this.timeout(time);   
-        const res : ResultType<Error, SchedulesSchema[]> = 
+        const res : ResultType<Error, ScheduleEvent[]> = 
         {
-            result : this.schedules.filter(s => s._id === eventId)
+            result : this.scheduleEvents.filter(s => s.eventId === eventId)
         };
         return res;
     };

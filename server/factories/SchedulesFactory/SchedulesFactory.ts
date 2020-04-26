@@ -1,11 +1,12 @@
 import ScheduleTypes from '../../../utils/ScheduleTypes';
 import ScheduleStates from '../../../utils/ScheduleStates';
 import ScheduleSchema from './../../models/Schedules/SchedulesShema';
+import ScheduleEvent from './../../models/Schedules/ScheduleEvent';
 
 
 export default class SchedulesFactory {
 
-    create(eventId: string, start: number, end: number, onboardingTime: number, thesisTime: number, rounds: number) : ScheduleSchema[] {
+    create(eventId: string, start: number, end: number, onboardingTime: number, thesisTime: number, rounds: number) : ScheduleEvent {
         var schedules : ScheduleSchema[] = [];
         
         let event : ScheduleSchema = {
@@ -16,6 +17,7 @@ export default class SchedulesFactory {
             type: ScheduleTypes.Event,
             state : ScheduleStates.Inactive,
         }
+
         schedules.push(event);
 
         const onboardingEnd = end + onboardingTime;
@@ -72,6 +74,15 @@ export default class SchedulesFactory {
             chatStart = chatEnd;
             chatEnd = chatStart + chatDuration;
         };
-        return schedules;
+
+        let scheduleEvent : ScheduleEvent = {
+            eventId: eventId,
+            start: start,
+            status: ScheduleStates.Inactive,
+            end: end,
+            schedules: schedules
+        };
+        
+        return scheduleEvent;
     };
 };
