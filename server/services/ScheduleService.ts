@@ -2,19 +2,30 @@ import SchdulesModel from './../models/Schedules/SchedulesModel';
 import IScheduleEvent from '../models/Schedules/IScheduleEvent';
 import ScheduleStates from '../../utils/ScheduleStates';
 import { EventEmitter } from 'events';
-import ScheduleEmitter from './ScheduleEmitter';
+import IScheduleEmitter from './../../utils/IScheduleEmitter';
+import { stringify } from 'querystring';
 
+class ScheduleService implements IScheduleEmitter {
 
-class ScheduleService {
-
-    schedulesModel : SchdulesModel
+    schedulesModel = SchdulesModel
     // eventId: IScheduleEvent 
     activeEvents : Map<string, IScheduleEvent> = new Map();
-    emitter : EventEmitter;
+    // MARK: IScheduleEmitter
+    scheduleEmitter? : EventEmitter 
+
+
+    start(emitter: EventEmitter) : void  {
+        this.scheduleEmitter = emitter;
+        emitter.emit("STARTED");
+        emitter.on("DONE", schedule => {
+            console.log(schedule)
+        });
+    };
  
     private async poller() {
-
-       let aboutToStart : IScheduleEvent[] = await this.schedulesModel.findAboutToStart(3)
+        console.log("Poller")
+        let aboutToStart : IScheduleEvent[] = await this.schedulesModel.findAboutToStart(3)
+        console.log(aboutToStart)
         aboutToStart.forEach(se => {
             this.activeEvents.set(se.eventId, se);
         });
@@ -33,31 +44,33 @@ class ScheduleService {
     };
 
     private checkActiveEvents() {
-        this.emitter.emit("SCHEDULE", "schedule");
-        for (const id in this.activeEvents) {
-            const scheduledEvent = this.activeEvents.get(id)!
-        
-            for (const schedule of scheduledEvent.schedules) {
+        if (!this.scheduleEmitter) 
+        { 
+            console.log("ScheduleService: no emitter present") ;return; 
+        }
 
-                if (schedule.state === ScheduleStates.Inactive && 
-                    schedule.start > Date.now() && schedule.end < Date.now())
+        this.activeEvents.forEach((value: IScheduleEvent, key: string) => 
+        {
+            for (const schedule of value.schedules) {
+            
+
+                if (schedule.state == ScheduleStates.Inactive && 
+                    schedule.start < Date.now() && schedule.end > Date.now() )
                 {
+                    console.log(schedule.type)
                     schedule.state = ScheduleStates.Active;
-                    this.emitter.emit("SCHEDULE", schedule);
+                    this.scheduleEmitter?.emit(schedule.type, schedule);
                 }
             };
-        };
+        })
     };
 
-    constructor(model: SchdulesModel, emitter: EventEmitter) {
+    constructor() {
         console.log("ScheduleService itnialized")
-        this.schedulesModel = model;
-        this.emitter = emitter
         this.startPoller(1000);
         this.startScheduleWorker(1000);
-  
     };
 };
 
 
-export default new ScheduleService( new SchdulesModel,ScheduleEmitter);
+export default new ScheduleService();

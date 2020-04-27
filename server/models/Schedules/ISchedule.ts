@@ -1,7 +1,8 @@
+import mongoose, { Document } from 'mongoose';
 import ScheduleStates from '../../../utils/ScheduleStates';
 import ScheduleTypes from '../../../utils/ScheduleTypes';
 
-export default interface ISchedule 
+export default interface ISchedule extends Document
 {
     _id: string,
     end: number,

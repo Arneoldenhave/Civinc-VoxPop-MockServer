@@ -12,7 +12,7 @@ export default class ResultsFactory {
     };
 
     create(users: IUsers[], thesisIds: string[]) {
-        let results : IResults[] = [];
+        let results : any[] = [];
         var i = 0;
         for (const thesisId of thesisIds) 
         {    
@@ -20,11 +20,10 @@ export default class ResultsFactory {
             {
                 const resultIndex = this._randomIndex();
                 const anwser = this.answers[resultIndex];
-                const _id = `result_${i}`;
 
-                let result : IResults = 
+                let result  = 
                 {
-                    _id: _id,
+    
                     userId: user._id,
                     groupId: user.groupId,
                     eventId: user.eventId,

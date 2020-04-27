@@ -42,10 +42,10 @@ class SocketModule {
      * get diconnected
      * @param {*} eventId 
      */
-    getDisconnected(eventId: string) {
+    getDisconnected(eventId: string) : string[] {
         const event = this.events.get(eventId)
         if (!event) {
-            return null;
+            return [];
         };
         const diconnected = event.getDisconnected();
         return diconnected;

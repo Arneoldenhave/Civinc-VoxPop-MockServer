@@ -1,7 +1,8 @@
+import mongoose, { Document } from 'mongoose';
 import ISchedule from "./ISchedule";
 import ScheduleStates from "../../../utils/ScheduleStates";
 
-export default interface IScheduleEvent 
+export default interface IScheduleEvent extends Document
 {
     start: number,
     end: number,

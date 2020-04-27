@@ -1,5 +1,5 @@
 import ChatsFactoryData from './ChatsFactoryData';
-import iChats from '../../models/Chats/iChats';
+import IChats from '../../models/Chats/IChats';
 
 export default class ChatsFactory {
 

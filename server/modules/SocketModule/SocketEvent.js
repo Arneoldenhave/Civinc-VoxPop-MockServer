@@ -163,7 +163,7 @@ class SocketEvent {
                 this.diconnected[key] = DISCONNECTED;
             };
         });
-        return this.diconnected;
+        return Object.keys(this.diconnected).array();
     };
     
     broadCastToSelected(ids, TYPE, data) 

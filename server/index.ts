@@ -2,9 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import routes from './routes/index';
 import Mongoose from './db/Mongoose';
-import socketService from './services/SocketService';
+import ScheduleEmitter from './services/ScheduleEmitter'
 
 
+// itnialize emitters
+ScheduleEmitter.start()
 const app = express();
 const database = new Mongoose();
 

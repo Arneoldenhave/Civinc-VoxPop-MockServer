@@ -5,7 +5,7 @@ export default class EventFactory {
 
     create(setup: EventFactorySetup) {
 
-        let schema : EventSchema = {
+        let schema  = {
             name : setup.name,
             start : setup.start,
             end : setup.end,

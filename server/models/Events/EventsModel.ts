@@ -1,6 +1,6 @@
 import IGroups from "./IGroups";
 import IEvents from './IEvents';
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -47,4 +47,7 @@ const EventsSchema = new Schema({
     }
 });
 
-export default mongoose.model('Events', EventsSchema);
+
+export interface IEventsModel extends Model<IEvents> {}
+
+export default mongoose.model<IEvents, IEventsModel>('Events', EventsSchema);

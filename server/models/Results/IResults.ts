@@ -1,4 +1,6 @@
-export default interface IResults 
+import mongoose, {Document } from 'mongoose';
+
+export default interface IResults extends Document
 {
     _id: string;
     userId: string;

@@ -24,7 +24,8 @@ import Event from './../models/Events/EventsModel';
 
 
 import MatchMakingAlgorith from './../modules/Matchmaking/index';
-
+import UsersModel from '../models/Users/UsersModel';
+import ResultsModel from './../models/Results/ResultsModel';
 
 export default class TestController {
 
@@ -48,7 +49,6 @@ export default class TestController {
         if (!setup) {
             return this.reponseHandler.badRequest(res);
         };
-
         const result = this.testSetupFactory.create(setup);
 
         if (result.error || !result.result ) {
@@ -67,11 +67,7 @@ export default class TestController {
         const theses : ITheses[] = this.thesesFavtory.create(thesesSetup);
         const thesisIds : string[] = theses.map(t => t._id);
 
-        // users
-        const users : IUsers[] = this.userFacotory.create(eventId, groups)
-
-        // results
-        const results : IResults[] = this.resultsFactory.create(users, thesisIds);
+   
 
         // event 
         const eventSetup : EventFactorySetup = {
@@ -87,19 +83,31 @@ export default class TestController {
             realUsers: testSetup.realUsers
         };
 
-        const event :IEvents = this.eventFactory.create(eventSetup);
+        const event = this.eventFactory.create(eventSetup);
 
         // schedule
         const onboardingTime : number =  eventSetup.onboardingTime;
         const thesesTime : number = eventSetup.thesesTime;
-        const schedulesEventSetup = this.schedulesFactory.create(event._id, event.start, event.end, onboardingTime, thesesTime, event.rounds)
-        const schedulesEvent = new SchedulesEvent(schedulesEventSetup)
 
-        const algorithm = new MatchMakingAlgorith();
-        const matches = algorithm.match(results, []);
-        const e = new Event(testSetup);
-        const saved = await schedulesEvent.save();
-        this.reponseHandler.ok(res, saved);
+        // events
+        const newEvent = new Event(testSetup);
+        // users
+        const users : IUsers[] = this.userFacotory.create(newEvent._id, groups)
+
+        // schedules
+        const schedulesEventSetup = this.schedulesFactory.create(newEvent._id, event.start, event.end, onboardingTime, thesesTime, event.rounds);
+        const schedulesEvent = new SchedulesEvent(schedulesEventSetup);
+    
+        // results
+        const resultsSetup : IResults[] = this.resultsFactory.create(users, thesisIds);
+ 
+
+    
+        const savedSchedules = await schedulesEvent.save();
+        const savedResults = await ResultsModel.insertMany(resultsSetup);
+        const savedEvent = await newEvent.save();
+
+        this.reponseHandler.ok(res, savedResults);
     };
 
 };

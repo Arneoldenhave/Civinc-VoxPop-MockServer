@@ -1,27 +1,66 @@
 import SocketModel from '../modules/SocketModule/SocketModel';
-import ChatModel from './../models/Chat/Model';
+import ChatModel from '../models/Chats/ChatsModel';
 import { EventEmitter } from 'events';
 import ScheduleEmitter from './ScheduleEmitter';
+import IScheduleEmitter from '../../utils/IScheduleEmitter';
+import ISchedule from '../models/Schedules/ISchedule';
+import { model } from 'mongoose';
+import IResults from '../models/Results/IResults';
 
 const MESSAGE = "message";
 
-class SocketController {
+class SocketController implements IScheduleEmitter {
 
-    chatModel: ChatModel;
+    chatModel = ChatModel;
     socketModel: SocketModel;
-    scheduleEmitter: EventEmitter;
 
+    // MARK: IScheduleEmitter
+    scheduleEmitter? : EventEmitter 
+    start(emitter: EventEmitter) : void  {
+        this.scheduleEmitter = emitter;
 
-    constructor(socketModel: SocketModel, chatModel: ChatModel, scheduleEmitter: EventEmitter) 
-    {
-        this.scheduleEmitter = scheduleEmitter;
-        this.chatModel = chatModel;
-        this.socketModel = socketModel;
-
-        scheduleEmitter.on("SCHEDULE", schedule => {
-
-            console.log("SCHEDULE");
+        emitter.on('THESIS', (schedule : ISchedule ) => {
+            console.log('THESIS')
+            this.handleThesis(schedule)
         });
+
+        emitter.on('ONBOARDING', (schedule : ISchedule ) => {
+            console.log('ONBOARDING')
+            this.handleOndboarding(schedule)
+        });
+
+        emitter.on("MATCHES", (matches : IResults[][]) => {
+            
+        })
+    };
+    
+
+    private handleThesis(schedule: ISchedule) {
+        const { eventId } = schedule;
+        this.broadcast(eventId, "SCHEDULE", schedule)
+    }
+
+    private handleChat(schedule: ISchedule) {
+        const state = schedule.state;
+        switch (state) {
+            case "DONE": 
+            // post done
+            case "ACTIVE":
+            // post active
+
+        };
+    };
+
+    private handleOndboarding(schedule: ISchedule) {
+        const { eventId } = schedule;
+        this.broadcast(eventId, "SCHEDULE", schedule)
+        
+    };
+    
+    constructor(socketModel: SocketModel) 
+    {
+
+        this.socketModel = socketModel;
     };
 
     onConnection(socket: any) {
@@ -32,7 +71,7 @@ class SocketController {
         return this.socketModel.getConnected(eventId);
     }
 
-    getDisconnected(eventId: string) {
+    getDisconnected(eventId: string) : string[] {
         return this.socketModel.getDisconnected(eventId);
     }
 
@@ -64,10 +103,8 @@ class SocketController {
         const result = this.socketModel.broadcastToSpecific(eventId, [matchId], MESSAGE, message);
         return result
     };
-    
 
-
-    start(io: any) {
+    startChatSocket(io: any) {
         io.on('connection', async (socket: any) => {
 
             var handshakeData = socket.request;
@@ -83,11 +120,11 @@ class SocketController {
 
                 const { eventId, chatId, userId, matchId, message} = data;
 
-                this.chatModel.updateChat(chatId, message);
+                this.chatModel.saveMessage(message);
                 const result = this.socketModel.broadcastToSpecific(eventId, [matchId], MESSAGE, message);
             });
         });
     };
 };
 
-export default new SocketController(new SocketModel(), new ChatModel(), ScheduleEmitter);
+export default new SocketController(new SocketModel());

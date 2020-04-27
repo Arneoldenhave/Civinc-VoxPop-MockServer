@@ -56,7 +56,7 @@ export default class SchedulesFactory {
                 start: chatStart ,
                 end: chatEnd,
                 eventId: eventId,
-                type: ScheduleTypes.Onboarding,
+                type: ScheduleTypes.Chat,
                 state : ScheduleStates.Inactive,
                 redirect : {
                     to: "SEARCHING"

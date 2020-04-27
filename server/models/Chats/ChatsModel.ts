@@ -1,7 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
-import iChats from './iChats';
+import IChats from './IChats';
 import ChatsSchema from './ChatsSchema';
+
+
 
 ChatsSchema.statics.saveMessage = async function(message: any) {
     return mongoose.model('Chats').update({_id: message.chatId}, { $push : {messages: message} } );
@@ -21,4 +23,8 @@ ChatsSchema.statics.findByUserId = async function(userId: string) {
     return mongoose.model('Chats').find({ userIds: { $in: userId } } );
 };
 
-export default mongoose.model<iChats>('Chats', ChatsSchema);
+export interface IChatsModel extends Model<IChats> {
+    saveMessage(message: any) : Promise<any>
+}
+
+export default mongoose.model<IChats, IChatsModel>('Chats', ChatsSchema);
