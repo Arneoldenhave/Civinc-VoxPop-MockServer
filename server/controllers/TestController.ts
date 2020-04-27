@@ -92,18 +92,18 @@ export default class TestController {
         // events
         const newEvent = new Event(testSetup);
         // users
-        const users : IUsers[] = this.userFacotory.create(newEvent._id, groups)
+        const users : any[] = this.userFacotory.create(newEvent._id, groups)
+        const newUsers = users.map ( u => new UsersModel(u))
 
         // schedules
         const schedulesEventSetup = this.schedulesFactory.create(newEvent._id, event.start, event.end, onboardingTime, thesesTime, event.rounds);
         const schedulesEvent = new SchedulesEvent(schedulesEventSetup);
     
         // results
-        const resultsSetup : IResults[] = this.resultsFactory.create(users, thesisIds);
+        const resultsSetup : IResults[] = this.resultsFactory.create(newUsers, thesisIds);
  
-
-    
         const savedSchedules = await schedulesEvent.save();
+        const savedUsers = await UsersModel.insertMany(users);
         const savedResults = await ResultsModel.insertMany(resultsSetup);
         const savedEvent = await newEvent.save();
 

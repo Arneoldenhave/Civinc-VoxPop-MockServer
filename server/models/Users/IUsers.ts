@@ -1,4 +1,6 @@
-export default interface IUsers 
+import mongoose, { Document } from 'mongoose';
+
+export default interface IUsers extends Document
 {
     _id: string;
     name: string;
