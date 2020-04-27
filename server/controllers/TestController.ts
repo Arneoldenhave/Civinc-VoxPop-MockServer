@@ -107,7 +107,7 @@ export default class TestController {
         const savedResults = await ResultsModel.insertMany(resultsSetup);
         const savedEvent = await newEvent.save();
 
-        this.reponseHandler.ok(res, savedResults);
+        this.reponseHandler.ok(res, savedSchedules);
     };
 
 };

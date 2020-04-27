@@ -47,9 +47,9 @@ class MatchMakingService implements IScheduleEmitter {
             return Error("MatchMakingService: Event not found")
         }
 
-        console.log("penis")
+
         const lastRounds = event.lastRounds;
-        const results : IResults[] = await this.resultsModel.findByEventId(id);        
+        const results : IResults[] = await this.resultsModel.findByEventId(event._id);   
         const inactiveUsers : string[] = SocketService.getDisconnected(event._id);
         const active = results.filter(result => !inactiveUsers.includes(result._id));
         const matches = this.matchMaking.match(active, lastRounds);

@@ -77,7 +77,7 @@ class SocketController implements IScheduleEmitter {
 
     connectMatches(eventId: string, matches: any[]) {
         const result = this.socketModel.setMatches(eventId, matches);
-        if (! result) {
+        if (!result) {
             console.log(`No connections for : ${eventId}`)
         } else {
             console.log("connect matches  for " + eventId)
